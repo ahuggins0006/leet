@@ -200,8 +200,9 @@
 (reverse (.toString x))
 
 (Integer/parseInt "123")
+
 (->> x
-     .toString
+     str
      reverse
      (apply str)
      Integer/parseInt
@@ -210,9 +211,10 @@
 (defn reverse-integer
   [x]
   (->> x
-       .toString
+       str
        reverse
        (apply str)
        Integer/parseInt))
 
 (reverse-integer x)
+
