@@ -218,3 +218,44 @@
 
 (reverse-integer x)
 
+;; Regular Expression Matching
+;; Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
+
+;; '.' Matches any single character.
+;; '*' Matches zero or more of the preceding element.
+;; The matching should cover the entire input string (not partial).
+
+(some #(= % \*) "aa*")
+(some #(or (= % \.)(= % \*)) (str "aa" "a."))
+
+(str (first "aa") (first "a"))
+
+(let [s "aa"
+      p "b"]
+  (cond (= p ".*") true
+        (or (empty? s) (empty? p)) false
+        :default (loop [s s
+                        p p]
+                        (if (or (not= (first s) (first p) (= (first p) ".")))
+                          false
+                          (recur (rest s) (rest p))
+                          ))
+        )
+  )
+
+(first "aa")
+(apply str (rest "a*"))
+
+(defn matches?
+  [s p]
+  (loop [s s
+         p p]
+    (cond (= p ".*")                                    true
+          (and (empty? s) (empty? p))                   true
+          (= (first p) \*)                              true
+          (or (= (first s) (first p)) (= (first p) \.)) (recur (apply str (rest s)) (apply str (rest p)))
+          :default                                      false)))
+
+(matches? "aa" "a")
+(matches? "aa" "a*")
+(matches? "ab" ".*")
