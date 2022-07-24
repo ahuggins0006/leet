@@ -259,3 +259,47 @@
 (matches? "aa" "a")
 (matches? "aa" "a*")
 (matches? "ab" ".*")
+
+
+;; Container with Most Water
+
+;; You are given an integer array height of length n. There are n vertical lines drawn
+;; such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+
+;; Find two lines that together with the x-axis form a container, such that the container contains the most water.
+;;
+;; Return the maximum amount of water a container can store.
+;;
+;; Notice that you may not slant the container.
+
+(let [h [1,8,6,2,5,4,8,3,7]]
+  (loop [h h
+         i 0]
+    (if (>= (first h) (second h))
+      i
+      (recur (drop 2 h) (inc i)))))
+
+(defn find-first-max
+  [h]
+  (loop [h h
+         i 0]
+    (if (>= (first h) (second h))
+      i
+      (recur (drop 2 h) (inc i)))))
+
+(nth [1,8,6,2,5,4,8,3,7] (find-first-max [1,8,6,2,5,4,8,3,7]))
+(find-first-max (reverse [1,8,6,2,5,4,8,3,7]))
+(count [1,8,6,2,5,4,8,3,7])
+
+(defn max-area
+  [h]
+  (let [left (find-first-max h)
+        leftv (nth h left)
+        right (- (dec (count h)) (find-first-max (reverse h)))
+        rightv (nth h right)]
+    (* (- right left) (apply min [leftv rightv]))))
+
+(max-area [1,8,6,2,5,4,8,3,7])
+;; => 49
+(max-area [1,1])
+;; => 1
