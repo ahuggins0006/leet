@@ -303,3 +303,54 @@
 ;; => 49
 (max-area [1,1])
 ;; => 1
+
+
+;; Given an integer, convert it to a roman numeral.
+
+
+(def numerals
+  {
+   1 "I"
+   4 "IV"
+   5 "V"
+   9 "IX"
+   10 "X"
+   40 "XL"
+   50 "L"
+   90 "XC"
+   100 "C"
+   400 "CD"
+   500 "D"
+   900 "CM"
+   1000 "M"
+   }
+  )
+
+(numerals 1000)
+
+(defn int-to-roman
+  ([x] (int-to-roman x []))
+  ([x v]
+   (cond (>= x 1000) (recur (- x 1000) (conj v (numerals 1000)))
+         (>= x 900)  (recur (- x 900) (conj v (numerals 900)))
+         (>= x 500)  (recur (- x 500) (conj v (numerals 500)))
+         (>= x 400)  (recur (- x 400) (conj v (numerals 400)))
+         (>= x 100)  (recur (- x 100) (conj v (numerals 100)))
+         (>= x 90)   (recur (- x 90) (conj v (numerals 90)))
+         (>= x 50)   (recur (- x 50) (conj v (numerals 50)))
+         (>= x 40)   (recur (- x 40) (conj v (numerals 40)))
+         (>= x 10)   (recur (- x 10) (conj v (numerals 10)))
+         (>= x 9)    (recur (- x 9) (conj v (numerals 9)))
+         (>= x 5)    (recur (- x 5) (conj v (numerals 5)))
+         (>= x 4)    (recur (- x 4) (conj v (numerals 4)))
+         (>= x 1)    (recur (- x 1) (conj v (numerals 1)))
+         (= x 0)     (apply str v))))
+
+(int-to-roman 4)
+;; => "IV"
+
+(int-to-roman 58)
+;; => "LVIII"
+
+(int-to-roman 1994)
+;; => "MCMXCIV"
