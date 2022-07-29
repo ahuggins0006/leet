@@ -354,3 +354,34 @@
 
 (int-to-roman 1994)
 ;; => "MCMXCIV"
+
+
+;; Longest Common Prefix
+;; Write a function to find the longest common prefix string amongst an array of strings
+;; If there is no common prefix, return an empty string.
+
+(def strs ["flowser" "flows" "flogsht"])
+
+;; only partial solution
+;; finds substrings as well as other common chars
+(comment (apply str (keys (filter #(= (val %) (count strs)) (frequencies (apply interleave strs))))))
+
+;; working out a way to ignore non substring chars
+(def t (frequencies (apply interleave strs)))
+;; => {\f 3, \l 3, \o 2, \i 1, \w 2, \g 1, \s 3}
+
+(first (partition-by #(= (val %) (count strs)) t))
+
+
+(defn longest-common-prefix
+  [strs]
+  (->> strs
+       (apply interleave)
+       frequencies
+       (partition-by #(= (val %) (count strs)))
+       first
+       (map key)
+       (apply str)))
+
+(longest-common-prefix strs)
+;; => "flo"
