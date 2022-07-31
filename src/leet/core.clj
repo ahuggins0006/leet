@@ -1,4 +1,4 @@
-(ns leet.core
+ (ns leet.core
   (:require [clojure.string :as s])
   (:gen-class))
 
@@ -385,3 +385,67 @@
 
 (longest-common-prefix strs)
 ;; => "flo"
+
+
+;; 3Sum
+
+;; Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]]
+;; such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+;; Notice that the solution set must not contain duplicate triplets.
+
+(def nums (map-indexed vector [-1 0 1 2 -1 -4]))
+nums
+
+
+(apply distinct? [0 2 2])
+(distinct (filter #(apply distinct? (map first %)) (map #(sort-by first %) (filter #(= (apply + (map second %)) 0) (for [x nums
+                                                                                                                                                                   y nums
+                                                                                                                                                                   z nums] [x y z])))))
+;; => (([0 -1] [1 0] [2 1]) ([0 -1] [3 2] [4 -1]) ([1 0] [2 1] [4 -1]))
+
+(map #(map second %) '(([0 -1] [1 0] [2 1]) ([0 -1] [3 2] [4 -1]) ([1 0] [2 1] [4 -1])))
+;; => ((-1 0 1) (-1 2 -1) (0 1 -1))
+
+(map #(sort %) '(([0 -1] [1 0] [2 1]) ([0 -1] [6 2] [4 -1]) ([1 0] [2 1] [4 -1])))
+
+(filter #(= (apply + (map second %)) 0) (for [x nums
+                                                               y nums
+                                                               z nums] [x y z]))
+
+(sort-by first '([0 -1] [1 0] [2 1]))
+
+(->> (for [x nums
+           y nums
+           z nums] [x y z])
+     (filter #(and (apply distinct? (map first %))(= (apply + (map second %)) 0)))
+     (map #(sort %))
+     distinct
+     (map #(map second %))
+     (map #(sort %))
+     set
+     )
+
+;; into a named function
+(defn three-sum
+  [nums]
+  (let [n (map-indexed vector nums)]
+    (->> (for [x n
+               y n
+               z n] [x y z])
+         (filter #(and (apply distinct? (map first %))(= (apply + (map second %)) 0)))
+         (map #(sort %))
+         distinct
+         (map #(map second %))
+         (map #(sort %))
+         set
+         )))
+
+(three-sum [-1 0 1 2 -1 -4])
+;; => #{(-1 0 1) (-1 -1 2)}
+
+(three-sum  [0,1,1])
+;; => #{}
+
+(three-sum [0 0 0])
+;; => #{(0 0 0)}
